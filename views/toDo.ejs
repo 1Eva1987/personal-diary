@@ -1,0 +1,9 @@
+<%- include("partials/header") %>
+
+<form action="/toDo" method="post">
+    <input type="text" name="todoItem" placeholder="Enter the to do item" required>
+    <input type="hidden" name="usersEmail" value="<%= usersEmail %>">
+    <button type="submit">Save</button>
+</form>
+
+<%- include("partials/footer") %>

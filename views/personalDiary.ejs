@@ -1,4 +1,15 @@
 <%- include("partials/header") %>
-<h1>welcome!!!!</h1>
+<nav>
+    <div>
+        Hello 
+        <% if (usersName){ %>
+            <%= usersName %>
+      <%  } %>
+    </div>
+    <div>
+        <a href="/toDo">To do list</a>
+    </div>
+</nav>
+
 <a href="logout" role="button">Logout</a>
 <%- include("partials/footer") %>
