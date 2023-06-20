@@ -45,7 +45,8 @@ app.get("/login", (req, res) => {
 });
 
 // POST
-// register a new user and adding to DB, if user already exists redirecting to login page
+
+// Register a new user and adding to DB, if user already exists redirecting to login page
 app.post("/register", (req, res) => {
   bcrypt.hash(req.body.password, saltRounds).then((hash) => {
     User.find({ email: req.body.email })
@@ -67,6 +68,30 @@ app.post("/register", (req, res) => {
         }
       })
       .catch((err) => console.log(err));
+  });
+});
+
+// Checking if the user exists in darabase and if so takes to the personalDiary page else to register page
+app.post("/login", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  User.findOne({ email: email }).then((foundUser) => {
+    if (foundUser) {
+      bcrypt
+        .compare(password, foundUser.password)
+        .then((result) => {
+          if (result) {
+            res.render("personalDiary");
+          } else {
+            console.log("password not matching");
+            // ntify user to check login info as password doesnt match
+          }
+        })
+        .catch((err) => console.log(err));
+    } else {
+      console.log("user not found");
+      //   notify user that user with this email is not registered yet!
+    }
   });
 });
 
