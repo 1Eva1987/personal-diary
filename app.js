@@ -154,6 +154,7 @@ app.post("/toDo", requireLogin, (req, res) => {
         itemsList: updatedUser.todoList,
         usersName: updatedUser.name,
         usersEmail: updatedUser.email,
+        postsList: updatedUser.postsList,
       });
     })
     .catch((err) => console.log(err));
@@ -172,6 +173,7 @@ app.post("/toDo/:item", requireLogin, (req, res) => {
         itemsList: updatedUser.todoList,
         usersName: updatedUser.name,
         usersEmail: updatedUser.email,
+        postsList: updatedUser.postsList,
       });
     })
     .catch((err) => console.log(err));
@@ -185,6 +187,26 @@ app.post("/compose", requireLogin, (req, res) => {
   User.findOneAndUpdate(
     { email: usersEmail },
     { $push: { postsList: { title: postTitle, text: postText } } },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      res.render("personalDiary", {
+        itemsList: updatedUser.todoList,
+        usersName: updatedUser.name,
+        usersEmail: updatedUser.email,
+        postsList: updatedUser.postsList,
+      });
+    })
+    .catch((err) => console.log(err));
+});
+
+// Delete post
+app.post("/deletePost", requireLogin, (req, res) => {
+  const postId = req.body.id;
+  console.log(req.session.user._id);
+  User.findOneAndUpdate(
+    { _id: req.session.user._id },
+    { $pull: { postsList: { _id: postId } } },
     { new: true }
   )
     .then((updatedUser) => {

@@ -5,16 +5,15 @@
             Hello
             <% if (usersName){ %>
                 <%= usersName %>
-                    <% } %>
+            <% } %>
         </div>
-
         <div>
             <a href="/logout" role="button">Logout</a>
             <a href="/createPost">Create Post</a>
             <a href="#toDo">To do list</a>
         </div>
     </nav>
-
+<!-- Users Posts -->
     <div>
         <h1>Your Posts:</h1>
     </div>
@@ -22,11 +21,16 @@
         <% postsList.forEach((post)=>{ %>
             <h3><%= post.title %></h3>
             <p><%= post.text %></p>
+            <form action="/deletePost" method="post">
+                <input type="hidden" name="id" value="<%= post._id %>">
+                <button type="submit">Delete</button>
+            </form>
       <%  }) %>
     </div>
 
 
 <!-- rendered list of to do items -->
+<h2>To do notes :) </h2>
     <div id="toDo">
         <% itemsList.forEach((item)=> { %>
             <p>
