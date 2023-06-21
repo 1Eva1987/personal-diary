@@ -42,9 +42,12 @@ const userSchema = new mongoose.Schema({
       type: String,
     },
   ],
+  item: String,
 });
 
 const User = new mongoose.model("User", userSchema);
+
+// if user is not loged in and manualy tries to navigate to toDo list the user is send to log ion
 const requireLogin = (req, res, next) => {
   if (req.session.loggedIn) {
     next();
@@ -52,6 +55,7 @@ const requireLogin = (req, res, next) => {
     res.redirect("/login");
   }
 };
+
 // GET
 app.get("/", (req, res) => {
   res.render("home");
@@ -63,14 +67,6 @@ app.get("/register", (req, res) => {
 
 app.get("/login", (req, res) => {
   res.render("login");
-});
-
-app.get("/toDo", requireLogin, (req, res) => {
-  res.render("toDo", { usersEmail: req.session.user.email });
-});
-app.post("/toDo", requireLogin, (req, res) => {
-  console.log(req.session.user.email);
-  console.log(req.body);
 });
 
 // POST
@@ -93,7 +89,11 @@ app.post("/register", (req, res) => {
             .save()
             .then(() => {
               req.session.loggedIn = true;
-              res.render("personalDiary", { usersName: req.body.name });
+              res.render("personalDiary", {
+                usersName: req.body.name,
+                usersEmail: req.body.email,
+                itemsList: req.body.todoList,
+              });
             })
             .catch((err) => console.log(err));
         }
@@ -114,7 +114,11 @@ app.post("/login", (req, res) => {
           if (result) {
             req.session.user = foundUser;
             req.session.loggedIn = true;
-            res.render("personalDiary", { usersName: foundUser.name });
+            res.render("personalDiary", {
+              usersName: foundUser.name,
+              usersEmail: foundUser.email,
+              itemsList: foundUser.todoList,
+            });
           } else {
             console.log("password not matching");
             // ntify user to check login info as password doesnt match
@@ -129,8 +133,35 @@ app.post("/login", (req, res) => {
   });
 });
 
+// Post TO DO list
+app.post("/toDo", requireLogin, (req, res) => {
+  console.log(req.body.todoItem, req.body.usersEmail);
+  User.findOneAndUpdate(
+    { email: req.body.usersEmail },
+    { $push: { todoList: req.body.todoItem } },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      res.render("personalDiary", {
+        itemsList: updatedUser.todoList,
+        usersName: updatedUser.name,
+        usersEmail: updatedUser.email,
+      });
+    })
+    .catch((err) => console.log(err));
+});
+
 // LOG OUT button
 app.get("/logout", (req, res) => {
   res.redirect("/");
 });
 app.listen(port, () => console.log(`Server is running on port ${port}`));
+
+// route to todo list is logedin
+
+// app.get("/toDo", requireLogin, (req, res) => {
+//   res.render("toDo", { usersEmail: req.session.user.email });
+// });
+// app.post("/toDo", requireLogin, (req, res) => {
+//   console.log(req.body.todoItem, req.body.usersEmail);
+// });
