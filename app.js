@@ -6,7 +6,6 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const session = require("express-session");
 const app = express();
-
 const port = process.env.PORT;
 
 app.use(bodyParser.urlencoded({ extended: "true" }));
@@ -47,7 +46,7 @@ const userSchema = new mongoose.Schema({
 
 const User = new mongoose.model("User", userSchema);
 
-// if user is not loged in and manualy tries to navigate to toDo list the user is send to log ion
+// if user is not loged in and manualy tries to navigate to an unauthorised page the user is send to login page
 const requireLogin = (req, res, next) => {
   if (req.session.loggedIn) {
     next();
@@ -70,14 +69,13 @@ app.get("/login", (req, res) => {
 });
 
 // POST
-
-// Register a new user and adding to DB, if user already exists redirecting to login page
+// Register a new user and adding to DB
 app.post("/register", (req, res) => {
   bcrypt.hash(req.body.password, saltRounds).then((hash) => {
     User.find({ email: req.body.email })
       .then((foundUser) => {
         if (foundUser.length > 0) {
-          req.session.user = foundUser;
+          //   req.session.user = foundUser[0];
           res.redirect("/login");
         } else {
           const newUser = new User({
@@ -92,7 +90,7 @@ app.post("/register", (req, res) => {
               res.render("personalDiary", {
                 usersName: req.body.name,
                 usersEmail: req.body.email,
-                itemsList: req.body.todoList,
+                itemsList: [],
               });
             })
             .catch((err) => console.log(err));
@@ -102,7 +100,7 @@ app.post("/register", (req, res) => {
   });
 });
 
-// Checking if the user exists in darabase and if so takes to the personalDiary page else to register page
+// Login: Checking if the user exists in darabase and if so takes to the personalDiary page else to register page
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -133,7 +131,7 @@ app.post("/login", (req, res) => {
   });
 });
 
-// Post TO DO list
+//TO DO list add item
 app.post("/toDo", requireLogin, (req, res) => {
   console.log(req.body.todoItem, req.body.usersEmail);
   User.findOneAndUpdate(
@@ -151,17 +149,33 @@ app.post("/toDo", requireLogin, (req, res) => {
     .catch((err) => console.log(err));
 });
 
+// TO DO list delete item
+app.post("/toDo/:item", requireLogin, (req, res) => {
+  const itemToDelete = req.params.item;
+  User.findOneAndUpdate(
+    { email: req.body.usersEmail },
+    { $pull: { todoList: itemToDelete } },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      res.render("personalDiary", {
+        itemsList: updatedUser.todoList,
+        usersName: updatedUser.name,
+        usersEmail: updatedUser.email,
+      });
+    })
+    .catch((errr) => console.log(err));
+});
+
 // LOG OUT button
 app.get("/logout", (req, res) => {
-  res.redirect("/");
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect("/");
+    }
+  });
 });
+
 app.listen(port, () => console.log(`Server is running on port ${port}`));
-
-// route to todo list is logedin
-
-// app.get("/toDo", requireLogin, (req, res) => {
-//   res.render("toDo", { usersEmail: req.session.user.email });
-// });
-// app.post("/toDo", requireLogin, (req, res) => {
-//   console.log(req.body.todoItem, req.body.usersEmail);
-// });

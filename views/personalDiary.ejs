@@ -9,17 +9,23 @@
         </div>
 
         <div>
-            <a href="logout" role="button">Logout</a>
+            <a href="/logout" role="button">Logout</a>
             <a href="#toDo">To do list</a>
         </div>
     </nav>
 
 <!-- rendered list of to do items -->
     <div id="toDo">
+
         <% itemsList.forEach((item)=> { %>
             <p>
                 <%= item %>
             </p>
+            <!-- delete item -->
+            <form action="/toDo/<%= item %>" method="post">
+                <input type="hidden" name="usersEmail" value="<%= usersEmail %>">
+                <button type="submit" name="delete">Delete</button>
+            </form>
             <% }); %>
     </div>
 
