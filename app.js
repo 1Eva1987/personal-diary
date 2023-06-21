@@ -22,7 +22,7 @@ app.use(
 
 // connecting to mongoDB
 mongoose
-  .connect(process.env.MONGO_CONNECTION)
+  .connect(process.env.CONNECTION_STRING)
   .then(() => console.log("Connected to mongoDB"))
   .catch((err) => console.log(`Not connected: ${err}`));
 
