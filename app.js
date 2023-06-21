@@ -20,7 +20,7 @@ app.use(
   })
 );
 
-// connecting to mongoDB
+// Connecting to mongoDB
 mongoose
   .connect(process.env.CONNECTION_STRING)
   .then(() => console.log("Connected to mongoDB"))
@@ -41,12 +41,17 @@ const userSchema = new mongoose.Schema({
       type: String,
     },
   ],
-  item: String,
+  postsList: [
+    {
+      title: String,
+      text: String,
+    },
+  ],
 });
 
 const User = new mongoose.model("User", userSchema);
 
-// if user is not loged in and manualy tries to navigate to an unauthorised page the user is send to login page
+// If user is not logedin and manualy tries to navigate to an unauthorised page the user is send to login
 const requireLogin = (req, res, next) => {
   if (req.session.loggedIn) {
     next();
@@ -55,7 +60,7 @@ const requireLogin = (req, res, next) => {
   }
 };
 
-// GET
+// GET routes
 app.get("/", (req, res) => {
   res.render("home");
 });
@@ -66,6 +71,10 @@ app.get("/register", (req, res) => {
 
 app.get("/login", (req, res) => {
   res.render("login");
+});
+
+app.get("/createPost", requireLogin, (req, res) => {
+  res.render("createPost");
 });
 
 // POST
@@ -91,6 +100,7 @@ app.post("/register", (req, res) => {
                 usersName: req.body.name,
                 usersEmail: req.body.email,
                 itemsList: [],
+                postsList: [],
               });
             })
             .catch((err) => console.log(err));
@@ -116,6 +126,7 @@ app.post("/login", (req, res) => {
               usersName: foundUser.name,
               usersEmail: foundUser.email,
               itemsList: foundUser.todoList,
+              postsList: foundUser.postsList,
             });
           } else {
             console.log("password not matching");
@@ -133,7 +144,6 @@ app.post("/login", (req, res) => {
 
 //TO DO list add item
 app.post("/toDo", requireLogin, (req, res) => {
-  console.log(req.body.todoItem, req.body.usersEmail);
   User.findOneAndUpdate(
     { email: req.body.usersEmail },
     { $push: { todoList: req.body.todoItem } },
@@ -164,10 +174,31 @@ app.post("/toDo/:item", requireLogin, (req, res) => {
         usersEmail: updatedUser.email,
       });
     })
-    .catch((errr) => console.log(err));
+    .catch((err) => console.log(err));
 });
 
-// LOG OUT button
+// Create post
+app.post("/compose", requireLogin, (req, res) => {
+  const postTitle = req.body.title;
+  const postText = req.body.text;
+  const usersEmail = req.session.user.email;
+  User.findOneAndUpdate(
+    { email: usersEmail },
+    { $push: { postsList: { title: postTitle, text: postText } } },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      res.render("personalDiary", {
+        itemsList: updatedUser.todoList,
+        usersName: updatedUser.name,
+        usersEmail: updatedUser.email,
+        postsList: updatedUser.postsList,
+      });
+    })
+    .catch((err) => console.log(err));
+});
+
+// LOG OUT route
 app.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
