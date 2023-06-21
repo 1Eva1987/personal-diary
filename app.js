@@ -5,11 +5,13 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const session = require("express-session");
+const path = require("path");
 const app = express();
 const port = process.env.PORT;
 
 app.use(bodyParser.urlencoded({ extended: "true" }));
 app.use(express.static("public"));
+app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use(
