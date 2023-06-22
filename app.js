@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema({
   },
   todoList: [
     {
-      type: String,
+      listItem: String,
     },
   ],
   postsList: [
@@ -97,6 +97,7 @@ app.post("/register", (req, res) => {
           newUser
             .save()
             .then(() => {
+              req.session.user = newUser;
               req.session.loggedIn = true;
               res.render("personalDiary", {
                 usersName: req.body.name,
@@ -148,7 +149,7 @@ app.post("/login", (req, res) => {
 app.post("/toDo", requireLogin, (req, res) => {
   User.findOneAndUpdate(
     { email: req.body.usersEmail },
-    { $push: { todoList: req.body.todoItem } },
+    { $push: { todoList: { listItem: req.body.todoItem } } },
     { new: true }
   )
     .then((updatedUser) => {
@@ -163,11 +164,11 @@ app.post("/toDo", requireLogin, (req, res) => {
 });
 
 // TO DO list delete item
-app.post("/toDo/:item", requireLogin, (req, res) => {
-  const itemToDelete = req.params.item;
+app.post("/toDo/:id", requireLogin, (req, res) => {
+  const idOfItemToDelete = req.params.id;
   User.findOneAndUpdate(
     { email: req.body.usersEmail },
-    { $pull: { todoList: itemToDelete } },
+    { $pull: { todoList: { _id: idOfItemToDelete } } },
     { new: true }
   )
     .then((updatedUser) => {
@@ -205,9 +206,9 @@ app.post("/compose", requireLogin, (req, res) => {
 // Delete post
 app.post("/deletePost", requireLogin, (req, res) => {
   const postId = req.body.id;
-  console.log(req.session.user._id);
+  const sessionID = req.session.user._id;
   User.findOneAndUpdate(
-    { _id: req.session.user._id },
+    { _id: sessionID },
     { $pull: { postsList: { _id: postId } } },
     { new: true }
   )

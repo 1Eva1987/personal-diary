@@ -29,15 +29,15 @@
     </div>
 
 
-<!-- rendered list of to do items -->
-<h2>To do notes :) </h2>
+<!-- rendered list of to do items / delete-->
+<h2>To do notes : </h2>
     <div id="toDo">
         <% itemsList.forEach((item)=> { %>
             <p>
-                <%= item %>
+                <%= item.listItem %>
             </p>
             <!-- delete item -->
-            <form action="/toDo/<%= item %>" method="post">
+            <form action="/toDo/<%= item._id %>" method="post">
                 <input type="hidden" name="usersEmail" value="<%= usersEmail %>">
                 <button type="submit" name="delete">Delete</button>
             </form>
