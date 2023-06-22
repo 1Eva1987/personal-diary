@@ -1,11 +1,14 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
+const mongoose = require("./dbConnection");
+const User = require("./user");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const session = require("express-session");
 const path = require("path");
+const requireLogin = require("./authMiddlewere");
+const renderer = require("./renderer");
 const app = express();
 const port = process.env.PORT;
 
@@ -21,46 +24,6 @@ app.use(
     saveUninitialized: false,
   })
 );
-
-// Connecting to mongoDB
-mongoose
-  .connect(process.env.CONNECTION_STRING)
-  .then(() => console.log("Connected to mongoDB"))
-  .catch((err) => console.log(`Not connected: ${err}`));
-
-const userSchema = new mongoose.Schema({
-  name: String,
-  email: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  todoList: [
-    {
-      listItem: String,
-    },
-  ],
-  postsList: [
-    {
-      title: String,
-      text: String,
-    },
-  ],
-});
-
-const User = new mongoose.model("User", userSchema);
-
-// If user is not logedin and manualy tries to navigate to an unauthorised page the user is send to login
-const requireLogin = (req, res, next) => {
-  if (req.session.loggedIn) {
-    next();
-  } else {
-    res.redirect("/login");
-  }
-};
 
 // GET routes
 app.get("/", (req, res) => {
@@ -79,19 +42,21 @@ app.get("/createPost", requireLogin, (req, res) => {
   res.render("createPost");
 });
 
-// POST
+// POST routes:
 // Register a new user and adding to DB
 app.post("/register", (req, res) => {
+  const usersName = req.body.name;
+  const usersEmail = req.body.email;
   bcrypt.hash(req.body.password, saltRounds).then((hash) => {
-    User.find({ email: req.body.email })
+    User.find({ email: usersEmail })
       .then((foundUser) => {
         if (foundUser.length > 0) {
           //   req.session.user = foundUser[0];
           res.redirect("/login");
         } else {
           const newUser = new User({
-            name: req.body.name,
-            email: req.body.email,
+            name: usersName,
+            email: usersEmail,
             password: hash,
           });
           newUser
@@ -100,8 +65,8 @@ app.post("/register", (req, res) => {
               req.session.user = newUser;
               req.session.loggedIn = true;
               res.render("personalDiary", {
-                usersName: req.body.name,
-                usersEmail: req.body.email,
+                usersName: usersName,
+                usersEmail: usersEmail,
                 itemsList: [],
                 postsList: [],
               });
@@ -147,18 +112,15 @@ app.post("/login", (req, res) => {
 
 //TO DO list add item
 app.post("/toDo", requireLogin, (req, res) => {
+  const usersEmail = req.body.usersEmail;
+  const newItem = req.body.todoItem;
   User.findOneAndUpdate(
-    { email: req.body.usersEmail },
-    { $push: { todoList: { listItem: req.body.todoItem } } },
+    { email: usersEmail },
+    { $push: { todoList: { listItem: newItem } } },
     { new: true }
   )
     .then((updatedUser) => {
-      res.render("personalDiary", {
-        itemsList: updatedUser.todoList,
-        usersName: updatedUser.name,
-        usersEmail: updatedUser.email,
-        postsList: updatedUser.postsList,
-      });
+      renderer.renderPersonalDiary(res, updatedUser);
     })
     .catch((err) => console.log(err));
 });
@@ -166,18 +128,14 @@ app.post("/toDo", requireLogin, (req, res) => {
 // TO DO list delete item
 app.post("/toDo/:id", requireLogin, (req, res) => {
   const idOfItemToDelete = req.params.id;
+  const usersEmail = req.body.usersEmail;
   User.findOneAndUpdate(
-    { email: req.body.usersEmail },
+    { email: usersEmail },
     { $pull: { todoList: { _id: idOfItemToDelete } } },
     { new: true }
   )
     .then((updatedUser) => {
-      res.render("personalDiary", {
-        itemsList: updatedUser.todoList,
-        usersName: updatedUser.name,
-        usersEmail: updatedUser.email,
-        postsList: updatedUser.postsList,
-      });
+      renderer.renderPersonalDiary(res, updatedUser);
     })
     .catch((err) => console.log(err));
 });
@@ -193,12 +151,7 @@ app.post("/compose", requireLogin, (req, res) => {
     { new: true }
   )
     .then((updatedUser) => {
-      res.render("personalDiary", {
-        itemsList: updatedUser.todoList,
-        usersName: updatedUser.name,
-        usersEmail: updatedUser.email,
-        postsList: updatedUser.postsList,
-      });
+      renderer.renderPersonalDiary(res, updatedUser);
     })
     .catch((err) => console.log(err));
 });
@@ -213,12 +166,7 @@ app.post("/deletePost", requireLogin, (req, res) => {
     { new: true }
   )
     .then((updatedUser) => {
-      res.render("personalDiary", {
-        itemsList: updatedUser.todoList,
-        usersName: updatedUser.name,
-        usersEmail: updatedUser.email,
-        postsList: updatedUser.postsList,
-      });
+      renderer.renderPersonalDiary(res, updatedUser);
     })
     .catch((err) => console.log(err));
 });
