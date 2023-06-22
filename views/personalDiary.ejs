@@ -9,13 +9,13 @@
         </div>
         <div>
             <a href="/logout" role="button">Logout</a>
-            <a href="/createPost">Create Post</a>
             <a href="#toDo">To do list</a>
         </div>
     </nav>
 <!-- Users Posts -->
     <div>
         <h1>Your Posts:</h1>
+        <a href="/createPost">Create Post</a>
     </div>
     <div>
         <% postsList.forEach((post)=>{ %>
@@ -24,6 +24,10 @@
             <form action="/deletePost" method="post">
                 <input type="hidden" name="id" value="<%= post._id %>">
                 <button type="submit">Delete</button>
+            </form>
+            <form action="/editPost" method="get">
+                <input type="hidden" name="id" value="<%= post._id %>" >
+                <button type="submit">Edit</button>
             </form>
       <%  }) %>
     </div>

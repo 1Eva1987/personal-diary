@@ -9,6 +9,7 @@ const session = require("express-session");
 const path = require("path");
 const requireLogin = require("./authMiddlewere");
 const renderer = require("./renderer");
+const { log } = require("console");
 const app = express();
 const port = process.env.PORT;
 
@@ -40,6 +41,28 @@ app.get("/login", (req, res) => {
 
 app.get("/createPost", requireLogin, (req, res) => {
   res.render("createPost");
+});
+
+app.get("/editPost", requireLogin, (req, res) => {
+  const postId = req.query.id;
+  const sessionId = req.session.user._id;
+  User.findOne({ _id: sessionId })
+    .then((foundUser) => {
+      const post = foundUser.postsList.id(postId);
+      if (post) {
+        const postTitle = post.title;
+        const postText = post.text;
+        res.render("editPost", {
+          postTitle: postTitle,
+          postText: postText,
+          postId: postId,
+        });
+      } else {
+        console.log("Post not found");
+        res.redirect("/personalDiary");
+      }
+    })
+    .catch((err) => console.log(err));
 });
 
 // POST routes:
@@ -159,10 +182,32 @@ app.post("/compose", requireLogin, (req, res) => {
 // Delete post
 app.post("/deletePost", requireLogin, (req, res) => {
   const postId = req.body.id;
-  const sessionID = req.session.user._id;
+  const sessionId = req.session.user._id;
   User.findOneAndUpdate(
-    { _id: sessionID },
+    { _id: sessionId },
     { $pull: { postsList: { _id: postId } } },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      renderer.renderPersonalDiary(res, updatedUser);
+    })
+    .catch((err) => console.log(err));
+});
+
+// Edit post
+app.post("/editPost", requireLogin, (req, res) => {
+  const sessioId = req.session.user._id;
+  const postId = req.body.id;
+  const updatedTitle = req.body.title;
+  const updatedText = req.body.text;
+  User.findOneAndUpdate(
+    { _id: sessioId, "postsList._id": postId },
+    {
+      $set: {
+        "postsList.$.title": updatedTitle,
+        "postsList.$.text": updatedText,
+      },
+    },
     { new: true }
   )
     .then((updatedUser) => {
