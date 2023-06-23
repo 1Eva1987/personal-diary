@@ -43,6 +43,20 @@ app.get("/createPost", requireLogin, (req, res) => {
   res.render("createPost");
 });
 
+app.get("/personalDiary", requireLogin, (req, res) => {
+  const sessioId = req.session.user._id;
+  User.findOne({ _id: sessioId })
+    .then((foundUser) => {
+      res.render("personalDiary", {
+        usersName: foundUser.name,
+        usersEmail: foundUser.email,
+        itemsList: foundUser.todoList,
+        postsList: foundUser.postsList,
+      });
+    })
+    .catch((err) => console.log(err));
+});
+
 app.get("/editPost", requireLogin, (req, res) => {
   const postId = req.query.id;
   const sessionId = req.session.user._id;
@@ -65,8 +79,26 @@ app.get("/editPost", requireLogin, (req, res) => {
     .catch((err) => console.log(err));
 });
 
+app.get("/posts/:postId", requireLogin, (req, res) => {
+  const postId = req.params.postId;
+  const sessionId = req.session.user._id;
+  User.findOne({ _id: sessionId })
+    .then((foundUser) => {
+      const post = foundUser.postsList.id(postId);
+      if (post) {
+        const postTitle = post.title;
+        const postText = post.text;
+        res.render("post", { postTitle: postTitle, postText: postText });
+      } else {
+        console.log("post not found");
+        res.redirect("/personalDiary");
+      }
+    })
+    .catch((err) => console.log(err));
+});
+
 // POST routes:
-// Register a new user and adding to DB
+// Register a new user
 app.post("/register", (req, res) => {
   const usersName = req.body.name;
   const usersEmail = req.body.email;
@@ -87,12 +119,7 @@ app.post("/register", (req, res) => {
             .then(() => {
               req.session.user = newUser;
               req.session.loggedIn = true;
-              res.render("personalDiary", {
-                usersName: usersName,
-                usersEmail: usersEmail,
-                itemsList: [],
-                postsList: [],
-              });
+              res.redirect("/personalDiary");
             })
             .catch((err) => console.log(err));
         }
@@ -101,7 +128,7 @@ app.post("/register", (req, res) => {
   });
 });
 
-// Login: Checking if the user exists in darabase and if so takes to the personalDiary page else to register page
+// Login:
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -113,12 +140,7 @@ app.post("/login", (req, res) => {
           if (result) {
             req.session.user = foundUser;
             req.session.loggedIn = true;
-            res.render("personalDiary", {
-              usersName: foundUser.name,
-              usersEmail: foundUser.email,
-              itemsList: foundUser.todoList,
-              postsList: foundUser.postsList,
-            });
+            res.redirect("/personalDiary");
           } else {
             console.log("password not matching");
             // ntify user to check login info as password doesnt match

@@ -18,9 +18,14 @@
         <a href="/createPost">Create Post</a>
     </div>
     <div>
-        <% postsList.forEach((post)=>{ %>
+        <% postsList.reverse().forEach((post)=>{ %>
             <h3><%= post.title %></h3>
-            <p><%= post.text %></p>
+                <% if(post.text.length> 50){ %>
+                    <p><%= post.text.substring(0, 50)+ "..." %></p>
+                    <a href="/posts/<%= post._id %>">Read More</a>
+                <%} else{%>
+                    <p><%= post.text %></p>
+                <%}%> 
             <form action="/deletePost" method="post">
                 <input type="hidden" name="id" value="<%= post._id %>">
                 <button type="submit">Delete</button>
