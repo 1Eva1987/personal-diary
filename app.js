@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const moment = require("moment");
 const bodyParser = require("body-parser");
 const mongoose = require("./dbConnection");
 const User = require("./user");
@@ -40,7 +41,14 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/createPost", requireLogin, (req, res) => {
-  res.render("createPost");
+  const sessioId = req.session.user._id;
+  User.findOne({ _id: sessioId })
+    .then((foundUser) => {
+      res.render("createPost", {
+        usersName: foundUser.name,
+      });
+    })
+    .catch((err) => console.log(err));
 });
 
 app.get("/personalDiary", requireLogin, (req, res) => {
@@ -50,7 +58,6 @@ app.get("/personalDiary", requireLogin, (req, res) => {
       res.render("personalDiary", {
         usersName: foundUser.name,
         usersEmail: foundUser.email,
-        itemsList: foundUser.todoList,
         postsList: foundUser.postsList,
       });
     })
@@ -67,6 +74,7 @@ app.get("/editPost", requireLogin, (req, res) => {
         const postTitle = post.title;
         const postText = post.text;
         res.render("editPost", {
+          usersName: foundUser.name,
           postTitle: postTitle,
           postText: postText,
           postId: postId,
@@ -88,11 +96,28 @@ app.get("/posts/:postId", requireLogin, (req, res) => {
       if (post) {
         const postTitle = post.title;
         const postText = post.text;
-        res.render("post", { postTitle: postTitle, postText: postText });
+        res.render("post", {
+          postTitle: postTitle,
+          postText: postText,
+          usersName: foundUser.name,
+        });
       } else {
         console.log("post not found");
         res.redirect("/personalDiary");
       }
+    })
+    .catch((err) => console.log(err));
+});
+
+app.get("/notes", requireLogin, (req, res) => {
+  const sessioId = req.session.user._id;
+  User.findOne({ _id: sessioId })
+    .then((foundUser) => {
+      res.render("notes", {
+        usersName: foundUser.name,
+        usersEmail: foundUser.email,
+        itemsList: foundUser.todoList,
+      });
     })
     .catch((err) => console.log(err));
 });
@@ -165,7 +190,7 @@ app.post("/toDo", requireLogin, (req, res) => {
     { new: true }
   )
     .then((updatedUser) => {
-      renderer.renderPersonalDiary(res, updatedUser);
+      renderer.renderNotes(res, updatedUser);
     })
     .catch((err) => console.log(err));
 });
@@ -180,7 +205,7 @@ app.post("/toDo/:id", requireLogin, (req, res) => {
     { new: true }
   )
     .then((updatedUser) => {
-      renderer.renderPersonalDiary(res, updatedUser);
+      renderer.renderNotes(res, updatedUser);
     })
     .catch((err) => console.log(err));
 });
@@ -192,7 +217,21 @@ app.post("/compose", requireLogin, (req, res) => {
   const usersEmail = req.session.user.email;
   User.findOneAndUpdate(
     { email: usersEmail },
-    { $push: { postsList: { title: postTitle, text: postText } } },
+    {
+      $push: {
+        postsList: {
+          $each: [
+            {
+              title: postTitle,
+              text: postText,
+              date: moment().format("ddd, Do MMM YYYY"),
+            },
+          ],
+          $position: 0,
+        },
+      },
+    },
+
     { new: true }
   )
     .then((updatedUser) => {
@@ -222,12 +261,14 @@ app.post("/editPost", requireLogin, (req, res) => {
   const postId = req.body.id;
   const updatedTitle = req.body.title;
   const updatedText = req.body.text;
+  const updatedDate = moment().format("ddd, Do MMM YYYY");
   User.findOneAndUpdate(
     { _id: sessioId, "postsList._id": postId },
     {
       $set: {
         "postsList.$.title": updatedTitle,
         "postsList.$.text": updatedText,
+        "postsList.$.date": updatedDate,
       },
     },
     { new: true }

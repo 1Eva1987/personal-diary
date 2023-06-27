@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
   postsList: [
     {
       title: String,
+      date: String,
       text: String,
     },
   ],

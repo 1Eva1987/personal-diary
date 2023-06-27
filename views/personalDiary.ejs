@@ -1,25 +1,16 @@
 <%- include("partials/header") %>
-<!-- Nav bar -->
-    <nav>
-        <div>
-            Hello
-            <% if (usersName){ %>
-                <%= usersName %>
-            <% } %>
-        </div>
-        <div>
-            <a href="/logout" role="button">Logout</a>
-            <a href="#toDo">To do list</a>
-        </div>
-    </nav>
+<%- include("partials/nav") %>
+
 <!-- Users Posts -->
     <div>
         <h1>Your Posts:</h1>
         <a href="/createPost">Create Post</a>
     </div>
+
     <div>
-        <% postsList.reverse().forEach((post)=>{ %>
+        <% postsList.forEach((post)=>{ %>
             <h3><%= post.title %></h3>
+            <h4><%= post.date %></h4>
                 <% if(post.text.length> 50){ %>
                     <p><%= post.text.substring(0, 50)+ "..." %></p>
                     <a href="/posts/<%= post._id %>">Read More</a>
@@ -34,30 +25,8 @@
                 <input type="hidden" name="id" value="<%= post._id %>" >
                 <button type="submit">Edit</button>
             </form>
-      <%  }) %>
+        <%  }) %>
     </div>
 
 
-<!-- rendered list of to do items / delete-->
-<h2>To do notes : </h2>
-    <div id="toDo">
-        <% itemsList.forEach((item)=> { %>
-            <p>
-                <%= item.listItem %>
-            </p>
-            <!-- delete item -->
-            <form action="/toDo/<%= item._id %>" method="post">
-                <input type="hidden" name="usersEmail" value="<%= usersEmail %>">
-                <button type="submit" name="delete">Delete</button>
-            </form>
-            <% }); %>
-    </div>
-
-<!-- add item to to do list -->
-    <form action="/toDo" method="post">
-        <input type="text" name="todoItem" placeholder="Enter the to do item" required>
-        <input type="hidden" name="usersEmail" value="<%= usersEmail %>">
-        <button type="submit">Save</button>
-    </form>
-
-    <%- include("partials/footer") %>
+ <%- include("partials/footer") %> 

@@ -1,0 +1,17 @@
+
+   <!-- Nav bar -->
+    <nav>
+        <div>
+            <h1>
+            <% if (usersName){ %>
+                <%= usersName %>'s Diary
+            <% } %></h1>
+
+        </div>
+        <div>
+            <a href="/logout" role="button">Logout</a>
+            <a href="/notes">My Notes</a>
+            <a href="/personalDiary">Diary</a>
+
+        </div>
+    </nav>
