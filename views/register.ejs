@@ -1,12 +1,15 @@
 <%- include("partials/header") %>
 
-<p>Registration</p>
-
-<form action="/register" method="post">
-    <input type="text" name="name" placeholder="Your Name">
-    <input type="email" name="email" placeholder="e-mail">
-    <input type="password" name="password" placeholder="password">
-    <button type="submit">Register</button>
-</form>
+<div class="home">
+    <h1>Personal Diary</h1>
+    <div class="reg-login">
+        <form action="/register" method="post">
+            <input type="text" name="name" placeholder="Type your first name">
+            <input type="email" name="email" placeholder="Type your e-mail">
+            <input type="password" name="password" placeholder="Type your password">
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</div>
 
 <%- include("partials/footer") %>

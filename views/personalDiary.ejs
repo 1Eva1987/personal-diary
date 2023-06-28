@@ -3,28 +3,32 @@
 
 <!-- Users Posts -->
     <div>
-        <h1>Your Posts:</h1>
-        <a href="/createPost">Create Post</a>
+        <h1>Diary Entries:</h1>
+        <a href="/createPost">Create New Entry</a>
     </div>
 
     <div>
         <% postsList.forEach((post)=>{ %>
-            <h3><%= post.title %></h3>
-            <h4><%= post.date %></h4>
-                <% if(post.text.length> 50){ %>
-                    <p><%= post.text.substring(0, 50)+ "..." %></p>
-                    <a href="/posts/<%= post._id %>">Read More</a>
-                <%} else{%>
-                    <p><%= post.text %></p>
-                <%}%> 
-            <form action="/deletePost" method="post">
-                <input type="hidden" name="id" value="<%= post._id %>">
-                <button type="submit">Delete</button>
-            </form>
-            <form action="/editPost" method="get">
-                <input type="hidden" name="id" value="<%= post._id %>" >
-                <button type="submit">Edit</button>
-            </form>
+            <div>
+                <h3><%= post.title %></h3>
+                <h4><%= post.date %></h4>
+                    <% if(post.text.length> 50){ %>
+                        <p><%= post.text.substring(0, 50)+ "..." %></p>
+                        <a href="/posts/<%= post._id %>">Read More</a>
+                    <%} else{%>
+                        <p><%= post.text %></p>
+                    <%}%> 
+            </div>
+            <div>
+                <form action="/deletePost" method="post">
+                    <input type="hidden" name="id" value="<%= post._id %>">
+                    <button type="submit">Delete</button>
+                </form>
+                <form action="/editPost" method="get">
+                    <input type="hidden" name="id" value="<%= post._id %>" >
+                    <button type="submit">Edit</button>
+                </form>
+            </div>
         <%  }) %>
     </div>
 

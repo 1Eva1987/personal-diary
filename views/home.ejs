@@ -1,7 +1,25 @@
 <%- include("partials/header") %>
-
-<h1>To create or use your personal diary, please login or register.</h1>
-<a href="/register" role="button">Register</a>
-<a href="/login" role="button">Login</a>
+<div class="home">
+    <h1>Personal Diary</h1>  
+    <div class="reg-login">
+        <form action="/login" method="post">
+            <input type="email" name="email" placeholder="Type your e-mail">
+            <input type="password" name="password" placeholder="Type your password">
+            <div class="forgot">
+                <a href="/forgotPassword">Forgot password?</a>
+            </div>
+            <button type="submit">Login</button> 
+            <div class="noAccount">
+                <p>Don't have an account yet?</p>
+                <a href="/register">Register</a>
+            </div>
+        </form>
+        
+    </div>
+</div>
 
 <%- include("partials/footer") %>
+    <!-- <div>
+        <a href="/login" role="button">Login</a>
+        <a href="/register" role="button">Register</a>
+    </div> -->

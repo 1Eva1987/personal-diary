@@ -1,0 +1,95 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat&display=swap");
+* {
+  margin: 0;
+}
+
+/* home */
+.home {
+  background-image: url("/images/background2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 96vh;
+}
+.home h1 {
+  margin: 0 5px;
+  font-family: "Dancing Script", cursive;
+  font-size: 70px;
+  text-align: center;
+  color: #e35e5e;
+  text-shadow: 1px 2px 5px #9ba9f0;
+  padding-top: 6vh;
+  padding-bottom: 6vh;
+}
+
+.reg-login form {
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width: 55vw;
+  height: 45vh;
+  background-color: rgb(244, 242, 242);
+  border-radius: 5px;
+  box-shadow: 2px 5px 10px rgb(184, 184, 184);
+}
+.reg-login form input {
+  height: 30px;
+  width: 30vw;
+  border-radius: 5px;
+  /* margin: 10px; */
+  border: none;
+  box-shadow: 2px 5px 5px rgb(184, 184, 184);
+  outline: none;
+}
+.forgot {
+  display: flex;
+  width: 45vw;
+  justify-content: flex-end;
+}
+.reg-login form button {
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-size: 15px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 5px 5px rgb(184, 184, 184);
+  height: 30px;
+  width: 70px;
+  padding: 5px;
+  /* margin: 10px; */
+  background: linear-gradient(90deg, #9ba9f0, #f67676);
+  cursor: pointer;
+}
+.home p {
+  font-family: "Montserrat", sans-serif;
+  font-size: 13px;
+}
+.noAccount {
+  width: 45vw;
+  display: flex;
+  justify-content: space-between;
+}
+.noAccount a,
+.forgot a {
+  font-family: "Montserrat", sans-serif;
+  color: rgb(97, 96, 96);
+  font-size: 13px;
+}
+/* footer */
+footer {
+  font-family: "Montserrat", sans-serif;
+  color: rgb(105, 104, 104);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4vh;
+  background-color: rgb(220, 220, 220);
+}
+footer span {
+  color: rgb(32, 32, 91);
+  font-family: "Montserrat", sans-serif;
+  color: #f67676;
+}
