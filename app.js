@@ -6,9 +6,12 @@ const mongoose = require("./dbConnection");
 const User = require("./user");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 const session = require("express-session");
 const path = require("path");
 const requireLogin = require("./authMiddlewere");
+const emailUtils = require("./emailUtils");
 const renderer = require("./renderer");
 const { log } = require("console");
 const app = express();
@@ -35,10 +38,6 @@ app.get("/", (req, res) => {
 app.get("/register", (req, res) => {
   res.render("register");
 });
-
-// app.get("/login", (req, res) => {
-//   res.render("login");
-// });
 
 app.get("/createPost", requireLogin, (req, res) => {
   const sessioId = req.session.user._id;
@@ -122,6 +121,27 @@ app.get("/notes", requireLogin, (req, res) => {
     .catch((err) => console.log(err));
 });
 
+app.get("/forgotPassword", (req, res) => {
+  res.render("forgotPassword", { message: "" });
+});
+
+app.get("/resetPassword", (req, res) => {
+  const token = req.query.token;
+  console.log(token);
+  User.findOne({
+    resetPasswordToken: crypto.createHash("sha256").update(token).digest("hex"),
+    resetPasswordExpires: { $gt: Date.now() },
+  })
+    .then((foundUser) => {
+      if (!foundUser) {
+        console.log("expired or bad token");
+        res.redirect("/forgotPassword");
+      } else {
+        res.render("resetPassword", { token: token });
+      }
+    })
+    .catch((err) => console.log(err));
+});
 // POST routes:
 // Register a new user
 app.post("/register", (req, res) => {
@@ -278,6 +298,80 @@ app.post("/editPost", requireLogin, (req, res) => {
       renderer.renderPersonalDiary(res, updatedUser);
     })
     .catch((err) => console.log(err));
+});
+
+// Forgor password
+app.post("/forgotPassword", (req, res) => {
+  const userEmail = req.body.email;
+  // findin user using provided email:
+  User.findOne({ email: userEmail })
+    .then((foundUser) => {
+      if (!foundUser) {
+        console.log("user not found");
+      } else {
+        // if user found generating reset token
+        const resetToken = crypto.randomBytes(20).toString("hex");
+        // saving hashed token to DB for safety
+        foundUser.resetPasswordToken = crypto
+          .createHash("sha256")
+          .update(resetToken)
+          .digest("hex");
+        foundUser.resetPasswordExpires = Date.now() + 600000;
+        foundUser
+          .save()
+          .then(() => {
+            console.log(
+              "reset token generated",
+              resetToken,
+              foundUser.resetPasswordToken
+            );
+            // sed email with resetToken (reset password link) to the user using nodemaler
+            emailUtils.sendResetTokenEmail(userEmail, resetToken);
+            res.render("forgotPassword", {
+              message: "Check your email, don't forget to check spam folder.",
+            });
+          })
+          .catch((err) => console.log(err));
+      }
+    })
+    .catch((err) => console.log(err));
+});
+
+// Reset password
+app.post("/resetPassword", (req, res) => {
+  const token = req.body.token;
+  const newPassword = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
+
+  if (newPassword !== confirmPassword) {
+    console.log("passwors not matching");
+    res.render("resetPassword", { token: token });
+  } else {
+    User.findOne({
+      resetPasswordToken: crypto
+        .createHash("sha256")
+        .update(token)
+        .digest("hex"),
+      resetPasswordExpires: { $gt: Date.now() },
+    })
+      .then((foundUser) => {
+        if (!foundUser) {
+          console.log("expired token");
+          res.redirect("/forgotPassword");
+        } else {
+          bcrypt.hash(newPassword, saltRounds).then((hash) => {
+            foundUser.password = hash;
+            foundUser.resetPasswordToken = undefined;
+            foundUser.resetPasswordExpires = undefined;
+            foundUser.save().then(() => {
+              console.log("password reset successful");
+              res.redirect("/");
+            });
+          });
+        }
+      })
+      .catch((err) => console.log(err));
+  }
 });
 
 // LOG OUT route
