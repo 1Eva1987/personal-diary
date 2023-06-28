@@ -168,14 +168,15 @@ app.post("/login", (req, res) => {
             res.redirect("/personalDiary");
           } else {
             console.log("password not matching");
-            // ntify user to check login info as password doesnt match
-            // res.render("login", { errorMessage: "Invalid password." });
+            res.render("login", { errorMessage: "Invalid password!" });
           }
         })
         .catch((err) => console.log(err));
     } else {
       console.log("user not found");
-      //   notify user that user with this email is not registered yet!
+      res.render("login", {
+        errorMessage: "User not found. Please check your e-mail.",
+      });
     }
   });
 });
