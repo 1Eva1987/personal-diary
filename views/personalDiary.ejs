@@ -8,11 +8,11 @@
         <% postsList.forEach((post)=>{ %>
             <div class="entry">
                 <div>
-                    <p><%= post.date %><p>
-                    <h2><%= post.title %></h2>
+                    <h2 class="date"><%= post.date %><h2>
+                    <h3><%= post.title %></h3>
                     <% if(post.text.length> 50){ %>
                         <p><%= post.text.substring(0, 200)+ "..." %></p>
-                        <a href="/posts/<%= post._id %>" type="submit">Read More</a>
+                        <a href="/posts/<%= post._id %>">Read More</a>
                     <%} else{%>
                         <p><%= post.text %></p>
                     <%}%> 
