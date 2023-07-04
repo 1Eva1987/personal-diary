@@ -307,7 +307,9 @@ app.post("/forgotPassword", (req, res) => {
   User.findOne({ email: userEmail })
     .then((foundUser) => {
       if (!foundUser) {
-        console.log("user not found");
+        res.render("forgotPassword", {
+          message: "User not found, please check your e-mail",
+        });
       } else {
         // if user found generating reset token
         const resetToken = crypto.randomBytes(20).toString("hex");
@@ -320,11 +322,6 @@ app.post("/forgotPassword", (req, res) => {
         foundUser
           .save()
           .then(() => {
-            console.log(
-              "reset token generated",
-              resetToken,
-              foundUser.resetPasswordToken
-            );
             // sed email with resetToken (reset password link) to the user using nodemaler
             emailUtils.sendResetTokenEmail(userEmail, resetToken);
             res.render("forgotPassword", {

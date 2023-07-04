@@ -15,7 +15,7 @@ function sendResetTokenEmail(userEmail, resetToken) {
     from: process.env.EMAIL,
     to: userEmail,
     subject: "Reset Your Password",
-    text: `Please click on the following link to reset your password: <a href="${resetLink}">${resetLink}</a>`,
+    html: `Please click on the following link to reset your password: <a href="${resetLink}">Reset Password</a>`,
   };
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {

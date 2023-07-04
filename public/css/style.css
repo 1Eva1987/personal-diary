@@ -3,10 +3,28 @@
 * {
   margin: 0;
 }
+/* nav */
+nav {
+  background-color: aliceblue;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+.logo h1 {
+  padding-left: 10px;
+  font-family: "Dancing Script", cursive;
+  font-size: 30px;
+}
+nav a {
+  font-family: "Montserrat", sans-serif;
+  color: rgb(97, 96, 96);
+  padding: 0 10px 0 10px;
+}
 
 /* home */
 .home {
-  background-image: url("/images/background2.jpg");
+  background-image: url("/images/background6.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   height: 96vh;
@@ -14,10 +32,10 @@
 .home h1 {
   margin: 0 5px;
   font-family: "Dancing Script", cursive;
-  font-size: 70px;
-  font-size: 8vw;
+  font-size: 8vh;
   text-align: center;
   color: #e35e5e;
+  color: white;
   text-shadow: 1px 2px 5px #9ba9f0;
   padding-top: 6vh;
   padding-bottom: 6vh;
@@ -31,7 +49,7 @@
   flex-direction: column;
   flex-wrap: nowrap;
   width: 55vw;
-  height: 45vh;
+  height: 50vh;
   background-color: rgb(244, 242, 242);
   border-radius: 5px;
   box-shadow: 2px 5px 10px rgb(184, 184, 184);
@@ -40,7 +58,6 @@
   height: 30px;
   width: 30vw;
   border-radius: 5px;
-  /* margin: 10px; */
   border: none;
   box-shadow: 2px 5px 5px rgb(184, 184, 184);
   outline: none;
@@ -81,16 +98,32 @@
 }
 /* footer */
 footer {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
   font-family: "Montserrat", sans-serif;
   color: rgb(105, 104, 104);
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 4vh;
   background-color: rgb(220, 220, 220);
 }
 footer span {
   color: rgb(32, 32, 91);
   font-family: "Montserrat", sans-serif;
   color: #f67676;
+}
+
+@media screen and (max-width: 600px) {
+  .reg-login form {
+    width: 80vw;
+    height: 60vh;
+  }
+  .reg-login form input {
+    width: 60vw;
+  }
+  .noAccount,
+  .forgot {
+    width: 60vw;
+  }
 }

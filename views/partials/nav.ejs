@@ -1,16 +1,15 @@
 
    <!-- Nav bar -->
     <nav>
-        <div>
+        <div class="logo">
             <h1>
             <% if (usersName){ %>
                 <%= usersName %>'s Diary
             <% } %></h1>
             <a href="/logout" role="button">Logout</a>
         </div>
-        <div>
-            <a href="/notes">My Notes</a>
+        <div class="nav-links">
             <a href="/personalDiary">Diary</a>
-
+            <a href="/notes">My Notes</a>
         </div>
     </nav>
