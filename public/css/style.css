@@ -4,22 +4,70 @@
   margin: 0;
 }
 /* nav */
+body {
+  background-color: rgb(255, 252, 252);
+}
 nav {
-  background-color: aliceblue;
+  background: linear-gradient(90deg, #9eb7e8, #ed9f9f);
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 60px;
+  box-shadow: 2px 5px 10px rgb(184, 184, 184);
 }
 .logo h1 {
   padding-left: 10px;
   font-family: "Dancing Script", cursive;
   font-size: 30px;
 }
-nav a {
+nav a,
+.entry a {
   font-family: "Montserrat", sans-serif;
-  color: rgb(97, 96, 96);
+  color: rgb(58, 58, 58);
   padding: 0 10px 0 10px;
+}
+/* main */
+.compose {
+  text-align: center;
+  margin: 20px;
+}
+.compose a {
+  font-size: 30px;
+  text-decoration: none;
+  font-family: "Montserrat", sans-serif;
+  color: black;
+}
+.compose a i {
+  background: linear-gradient(90deg, #9eb7e8, #ed9f9f);
+  padding: 5px;
+  border-radius: 5px;
+}
+.story {
+  font-family: "Dancing Script", cursive;
+  font-size: 50px;
+  text-align: center;
+  color: #f67676;
+  text-shadow: 1px 2px 5px #9ba9f0;
+}
+.entry {
+  padding: 10px;
+  margin: 10px;
+  background-color: #f0e5e5;
+  border-radius: 5px;
+  box-shadow: 2px 5px 10px rgb(184, 184, 184);
+  display: flex;
+  flex-direction: column;
+}
+.entry h2 {
+  font-family: "Dancing Script", cursive;
+  text-transform: capitalize;
+}
+.entry p {
+  display: inline;
+  font-family: "Montserrat", sans-serif;
+}
+.btn-container {
+  display: flex;
 }
 
 /* home */
@@ -67,7 +115,7 @@ nav a {
   width: 45vw;
   justify-content: flex-end;
 }
-.reg-login form button {
+.btn {
   color: black;
   font-family: "Montserrat", sans-serif;
   font-size: 15px;
@@ -77,8 +125,10 @@ nav a {
   height: 30px;
   width: 70px;
   padding: 5px;
-  /* margin: 10px; */
+  margin: 5px;
   background: linear-gradient(90deg, #9ba9f0, #f67676);
+  background: linear-gradient(90deg, #9eb7e8, #f18d8d);
+
   cursor: pointer;
 }
 .home p {

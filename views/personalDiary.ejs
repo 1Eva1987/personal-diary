@@ -1,35 +1,33 @@
 <%- include("partials/header") %>
 <%- include("partials/nav") %>
 
-    <div>
-        <h1>Diary Entries:</h1>
-        <a href="/createPost">Create New Entry</a>
+    <div class="compose">
+        <a href="/createPost">Create New Entry <i class="fa-solid fa-plus"></i></a>
     </div>
-
-    <div>
+    <h1 class="story">My Story</h1>
         <% postsList.forEach((post)=>{ %>
-            <div>
-                <h3><%= post.title %></h3>
-                <h4><%= post.date %></h4>
+            <div class="entry">
+                <div>
+                    <p><%= post.date %><p>
+                    <h2><%= post.title %></h2>
                     <% if(post.text.length> 50){ %>
-                        <p><%= post.text.substring(0, 50)+ "..." %></p>
-                        <a href="/posts/<%= post._id %>">Read More</a>
+                        <p><%= post.text.substring(0, 200)+ "..." %></p>
+                        <a href="/posts/<%= post._id %>" type="submit">Read More</a>
                     <%} else{%>
                         <p><%= post.text %></p>
                     <%}%> 
-            </div>
-            <div>
-                <form action="/deletePost" method="post">
-                    <input type="hidden" name="id" value="<%= post._id %>">
-                    <button type="submit">Delete</button>
-                </form>
-                <form action="/editPost" method="get">
-                    <input type="hidden" name="id" value="<%= post._id %>" >
-                    <button type="submit">Edit</button>
-                </form>
+                </div>
+                <div class="btn-container">
+                    <form action="/deletePost" method="post">
+                        <input type="hidden" name="id" value="<%= post._id %>">
+                        <button class="btn" type="submit">Delete</button>
+                    </form>
+                    <form action="/editPost" method="get">
+                        <input type="hidden" name="id" value="<%= post._id %>" >
+                        <button class="btn" type="submit">Edit</button>
+                    </form>
+                </div>
             </div>
         <%  }) %>
-    </div>
-
 
  <%- include("partials/footer") %> 
