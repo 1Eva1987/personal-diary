@@ -7,7 +7,6 @@
 }
 /* nav */
 body {
-  /* margin-top: 70px; */
   background-color: rgb(255, 252, 252);
 }
 nav {
@@ -38,7 +37,7 @@ nav a {
   background-image: url("/images/background6.jpg");
   background-repeat: no-repeat;
   background-size: cover;
-  height: 96vh;
+  height: 98vh;
 }
 .home h1 {
   margin: 0 5px;
