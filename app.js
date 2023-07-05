@@ -99,7 +99,7 @@ app.get("/posts/:postId", requireLogin, (req, res) => {
           postTitle: postTitle,
           postText: postText,
           usersName: foundUser.name,
-          postId: post._id,
+          // postId: post._id,
         });
       } else {
         console.log("post not found");
