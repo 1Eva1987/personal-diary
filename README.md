@@ -10,9 +10,9 @@ The Personal Diary App is a secure and user-friendly web application. The app im
 
 ## Usage
 
-### User Registration
+### User Registration and Login
 
-and Login: Users can create an account and log in to access their personal diary and task manager.
+Users can create an account and log in to access their personal diary and task manager.
 
 ### Password Reset
 
