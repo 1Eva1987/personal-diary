@@ -1,26 +1,26 @@
 <%- include("partials/header") %>
 <%- include("partials/nav") %>
 
-<!-- rendered list of to do items / delete-->
-<h2>To do notes : </h2>
-    <div id="toDo">
-        <% itemsList.forEach((item)=> { %>
-            <p>
-                <%= item.listItem %>
-            </p>
+<h1 class="story">My little notes</h1>
+<div class="note-container">
+    <% itemsList.forEach((item)=> { %>
+        <div class="note-entry">
+            <p><%= item.listItem %></p>
             <!-- delete item -->
             <form action="/toDo/<%= item._id %>" method="post">
                 <input type="hidden" name="usersEmail" value="<%= usersEmail %>">
-                <button type="submit" name="delete">Delete</button>
+                <button class="btn" type="submit" name="delete">Delete</button>
             </form>
-            <% }); %>
+        </div>
+    <% }); %>
+    <!-- add item -->
+    <div>
+        <form action="/toDo" method="post">
+            <input type="text" name="todoItem" placeholder="Make a note here" required>
+            <input type="hidden" name="usersEmail" value="<%= usersEmail %>">
+            <button class="btn" type="submit">Save</button>
+        </form>
     </div>
-
-<!-- add item to to do list -->
-    <form action="/toDo" method="post">
-        <input type="text" name="todoItem" placeholder="Enter the to do item" required>
-        <input type="hidden" name="usersEmail" value="<%= usersEmail %>">
-        <button type="submit">Save</button>
-    </form>
+</div>
 <%- include("partials/footer") %>
 
