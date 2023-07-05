@@ -1,9 +1,19 @@
 <%- include("partials/header") %>
 <%- include("partials/nav") %>
 
-<h1><%= postTitle %></h1>
-<p><%= postText %></p>
-<a href="/personalDiary">Home</a>
-
+<h1 class="story"><%= postTitle %></h1>
+<div class="story-container">
+    <p class= "story-text"><%= postText %></p>
+    <div class="btn-container">
+        <form action="/deletePost" method="post">
+            <input type="hidden" name="id" value="<%= postId%>">
+            <button class="btn" type="submit">Delete</button>
+        </form>
+        <form action="/editPost" method="get">
+            <input type="hidden" name="id" value="<%= postId %>" >
+            <button class="btn" type="submit">Edit</button>
+        </form>
+    </div>
+</div>
 <%- include("partials/footer") %>
 

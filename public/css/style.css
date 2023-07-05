@@ -7,7 +7,7 @@
 }
 /* nav */
 body {
-  margin-top: 70px;
+  /* margin-top: 70px; */
   background-color: rgb(255, 252, 252);
 }
 nav {
@@ -32,63 +32,7 @@ nav a {
   font-weight: bolder;
   padding: 0 10px 0 10px;
 }
-/* main */
-.compose {
-  text-align: center;
-  margin: 100px 0 0 0;
-}
-.compose a {
-  font-size: 30px;
-  text-decoration: none;
-  font-family: "Montserrat", sans-serif;
-  color: black;
-}
-.compose a i {
-  background: linear-gradient(90deg, #9eb7e8, #ed9f9f);
-  padding: 5px;
-  border-radius: 5px;
-}
-.story {
-  font-family: "Dancing Script", cursive;
-  font-size: 50px;
-  text-align: center;
-  color: #f67676;
-  text-shadow: 1px 2px 5px #9ba9f0;
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-.entry {
-  padding: 10px;
-  margin: 10px;
-  background-color: #f0e5e5;
-  border-radius: 5px;
-  box-shadow: 2px 5px 10px rgb(184, 184, 184);
-  display: flex;
-  flex-direction: column;
-}
-.entry h3 {
-  font-family: "Dancing Script", cursive;
-  font-size: 30px;
-  padding-bottom: 10px;
-}
-.date {
-  font-size: 20px;
-  font-family: "Dancing Script", cursive;
-}
-.entry p {
-  display: inline;
-  font-family: "Montserrat", sans-serif;
-}
-.entry a {
-  font-family: "Montserrat", sans-serif;
-  color: rgb(58, 58, 58);
-}
-.btn-container {
-  padding-top: 10px;
-  display: flex;
-}
-
-/* home */
+/* home login-register forms*/
 .home {
   background-image: url("/images/background6.jpg");
   background-repeat: no-repeat;
@@ -121,7 +65,8 @@ nav a {
   box-shadow: 2px 5px 10px rgb(184, 184, 184);
 }
 .reg-login form input,
-.create-story form input {
+.create-story form input,
+.edit-story form input {
   height: 30px;
   width: 30vw;
   border-radius: 5px;
@@ -129,7 +74,6 @@ nav a {
   box-shadow: 2px 5px 5px rgb(184, 184, 184);
   outline: none;
 }
-
 .forgot {
   display: flex;
   width: 45vw;
@@ -148,7 +92,6 @@ nav a {
   margin: 5px;
   background: linear-gradient(90deg, #9ba9f0, #f67676);
   background: linear-gradient(90deg, #9eb7e8, #f18d8d);
-
   cursor: pointer;
 }
 .home p {
@@ -166,9 +109,65 @@ nav a {
   color: rgb(97, 96, 96);
   font-size: 13px;
 }
-/* compose */
 
-.create-story form {
+/* personalDiary page */
+.compose {
+  text-align: center;
+  margin: 10px 0 20px 0;
+}
+.compose a {
+  font-size: 30px;
+  text-decoration: none;
+  font-family: "Montserrat", sans-serif;
+  color: black;
+}
+.compose a i {
+  background: linear-gradient(90deg, #9eb7e8, #ed9f9f);
+  padding: 5px;
+  border-radius: 5px;
+}
+.story {
+  font-family: "Dancing Script", cursive;
+  font-size: 50px;
+  text-align: center;
+  color: #f67676;
+  text-shadow: 1px 2px 5px #9ba9f0;
+  margin: 90px 0 20px 0;
+}
+.entry {
+  padding: 10px;
+  margin: 10px 10px 20px 10px;
+  background-color: #f0e5e5;
+  border-radius: 5px;
+  box-shadow: 2px 5px 10px rgb(184, 184, 184);
+  display: flex;
+  flex-direction: column;
+}
+.entry h3 {
+  font-family: "Dancing Script", cursive;
+  font-size: 30px;
+  padding-bottom: 10px;
+}
+.date {
+  font-size: 20px;
+  font-family: "Dancing Script", cursive;
+}
+.entry p {
+  display: inline;
+  font-family: "Montserrat", sans-serif;
+}
+.entry a {
+  font-family: "Montserrat", sans-serif;
+  color: rgb(58, 58, 58);
+}
+.btn-container {
+  padding-top: 10px;
+  display: flex;
+}
+
+/* compose */
+.create-story form,
+.edit-story form {
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -185,7 +184,8 @@ input,
 textarea {
   font-family: "Montserrat", sans-serif;
 }
-.create-story form textarea {
+.create-story form textarea,
+.edit-story form textarea {
   width: 70vw;
   height: 50vh;
   outline: none;
@@ -198,6 +198,20 @@ textarea::placeholder,
 input::placeholder {
   font-family: "Montserrat", sans-serif;
 }
+
+/* full story */
+.story-text {
+  margin: 10px;
+  font-family: "Montserrat", sans-serif;
+}
+.story-container {
+  background-color: #f0e5e5;
+  border-radius: 5px;
+  box-shadow: 2px 5px 10px rgb(184, 184, 184);
+  margin: 10px;
+  padding: 10px;
+}
+
 /* footer */
 footer {
   width: 100%;
