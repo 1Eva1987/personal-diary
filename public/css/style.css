@@ -157,13 +157,16 @@ form input {
   display: inline;
   font-family: "Montserrat", sans-serif;
 }
-.entry a {
+.entry a,
+.back {
   font-family: "Montserrat", sans-serif;
   color: rgb(58, 58, 58);
+  padding-left: 10px;
 }
 .btn-container {
   padding-top: 10px;
   display: flex;
+  align-items: flex-end;
 }
 
 /* compose */
@@ -204,6 +207,7 @@ input::placeholder {
 .story-text {
   margin: 10px;
   font-family: "Montserrat", sans-serif;
+  white-space: break-spaces;
 }
 .story-container {
   background-color: #f0e5e5;
@@ -212,6 +216,7 @@ input::placeholder {
   margin: 10px;
   padding: 10px;
 }
+
 /* notes */
 .note-container {
   margin: 40px auto;
