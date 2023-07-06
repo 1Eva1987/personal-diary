@@ -31,14 +31,15 @@ app.use(
 );
 
 // GET routes
+// home page with login form
 app.get("/", (req, res) => {
   res.render("home");
 });
-
+// register form
 app.get("/register", (req, res) => {
   res.render("register");
 });
-
+// create post page
 app.get("/createPost", requireLogin, (req, res) => {
   const sessioId = req.session.user._id;
   User.findOne({ _id: sessioId })
@@ -49,7 +50,7 @@ app.get("/createPost", requireLogin, (req, res) => {
     })
     .catch((err) => console.log(err));
 });
-
+// diary page
 app.get("/personalDiary", requireLogin, (req, res) => {
   const sessioId = req.session.user._id;
   User.findOne({ _id: sessioId })
@@ -59,6 +60,20 @@ app.get("/personalDiary", requireLogin, (req, res) => {
         usersEmail: foundUser.email,
         postsList: foundUser.postsList,
       });
+    })
+    .catch((err) => console.log(err));
+});
+
+app.get("/deletePost", requireLogin, (req, res) => {
+  const postId = req.query.id;
+  const sessionId = req.session.user._id;
+  User.findOneAndUpdate(
+    { _id: sessionId },
+    { $pull: { postsList: { _id: postId } } },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      renderer.renderPersonalDiary(res, updatedUser);
     })
     .catch((err) => console.log(err));
 });
@@ -95,11 +110,13 @@ app.get("/posts/:postId", requireLogin, (req, res) => {
       if (post) {
         const postTitle = post.title;
         const postText = post.text;
+        const postDate = post.date;
         res.render("post", {
           postTitle: postTitle,
           postText: postText,
+          postDate: postDate,
           usersName: foundUser.name,
-          // postId: post._id,
+          postId: postId,
         });
       } else {
         console.log("post not found");
@@ -246,7 +263,7 @@ app.post("/compose", requireLogin, (req, res) => {
             {
               title: postTitle,
               text: postText,
-              date: moment().format("ddd, Do MMM YYYY"),
+              date: moment().format("Do MMM YYYY"),
             },
           ],
           $position: 0,
@@ -283,14 +300,14 @@ app.post("/editPost", requireLogin, (req, res) => {
   const postId = req.body.id;
   const updatedTitle = req.body.title;
   const updatedText = req.body.text;
-  const updatedDate = moment().format("ddd, Do MMM YYYY");
+  // const updatedDate = moment().format("Do MMM YYYY");
   User.findOneAndUpdate(
     { _id: sessioId, "postsList._id": postId },
     {
       $set: {
         "postsList.$.title": updatedTitle,
         "postsList.$.text": updatedText,
-        "postsList.$.date": updatedDate,
+        // "postsList.$.date": updatedDate,
       },
     },
     { new: true }

@@ -2,11 +2,15 @@
 <%- include("partials/nav") %>
 
 <h1 class="story"><%= postTitle %></h1>
+<h2 class="date"><%= postDate %></h2>
 <div class="story-container">
     <p class= "story-text"><%= postText %></p>
-
-        <a class="back" href="/personalDiary">Back</a>
-
+    <div class="btn-container">
+    <button class="btn"><a class="edit-del-link" href="/editPost?id=<%= postId %>">Edit</a></button>
+    <button class="btn"><a  class="edit-del-link" href="/deletePost?id=<%= postId %>">Delete</a></button>
+    <a class="back" href="/personalDiary">Back</a>
+    </div> 
 </div>
-<%- include("partials/footer") %>
 
+
+<%- include("partials/footer") %>
