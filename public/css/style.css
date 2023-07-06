@@ -126,6 +126,20 @@ form input {
   padding: 5px;
   border-radius: 5px;
 }
+.search-form {
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+}
+
+.search-form form input {
+  background-color: rgb(244, 242, 242);
+  text-align: center;
+}
+.post-not-found {
+  font-family: "Montserrat", sans-serif;
+  text-align: center;
+}
 .story {
   font-family: "Dancing Script", cursive;
   font-size: 50px;
@@ -224,9 +238,10 @@ input::placeholder {
 }
 .back {
   font-family: "Montserrat", sans-serif;
-  color: rgb(97, 96, 96);
+  color: rgb(58, 58, 58);
   font-size: 15px;
   margin-left: 20px;
+  margin-bottom: 5px;
 }
 /* notes */
 .note-container {

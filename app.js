@@ -59,7 +59,35 @@ app.get("/personalDiary", requireLogin, (req, res) => {
         usersName: foundUser.name,
         usersEmail: foundUser.email,
         postsList: foundUser.postsList,
+        errorMessage: "",
       });
+    })
+    .catch((err) => console.log(err));
+});
+
+app.get("/foundPosts", requireLogin, (req, res) => {
+  const searchDate = moment(req.query.searchDate).format("Do MMM YYYY");
+  const sessioId = req.session.user._id;
+  User.findOne({ _id: sessioId })
+    .then((foundUser) => {
+      let postsList = foundUser.postsList;
+      if (searchDate) {
+        postsList = postsList.filter((post) => post.date === searchDate);
+        console.log(postsList);
+        if (postsList.length > 0) {
+          res.render("foundPosts", {
+            usersName: foundUser.name,
+            postsList: foundUser.postsList,
+          });
+        } else {
+          res.render("personalDiary", {
+            usersName: foundUser.name,
+            usersEmail: foundUser.email,
+            postsList: foundUser.postsList,
+            errorMessage: "No stories found for the selected date.",
+          });
+        }
+      }
     })
     .catch((err) => console.log(err));
 });
@@ -270,7 +298,6 @@ app.post("/compose", requireLogin, (req, res) => {
         },
       },
     },
-
     { new: true }
   )
     .then((updatedUser) => {

@@ -1,10 +1,20 @@
 <%- include("partials/header") %>
 <%- include("partials/nav") %>
+
     <h1 class="story">My Story begins here...</h1>
 
     <div class="compose">
         <a href="/createPost">Create New Entry <i class="fa-solid fa-plus"></i></a>
     </div>
+    <%if(postsList.length >0){%>
+        <div class="search-form">
+        <form action="/foundPosts" method="get">
+            <input type="date" name="searchDate" >
+            <button class="btn" type="submit">Search</button>
+        </form>
+    </div>
+    <%}%>
+    <p class="post-not-found"><%= errorMessage %></p>
         <% postsList.forEach((post)=>{ %>
             <div class="entry">
                 <div>

@@ -3,6 +3,7 @@ function renderPersonalDiary(res, updatedUser, extraData = {}) {
     usersName: updatedUser.name,
     usersEmail: updatedUser.email,
     postsList: updatedUser.postsList,
+    errorMessage: "",
     ...extraData,
   };
   res.render("personalDiary", data);
