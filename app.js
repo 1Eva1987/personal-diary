@@ -31,15 +31,17 @@ app.use(
 );
 
 // GET routes
-// home page with login form
+// Home page with login form
 app.get("/", (req, res) => {
   res.render("home");
 });
-// register form
+
+// Register form
 app.get("/register", (req, res) => {
   res.render("register");
 });
-// create post page
+
+// Create post page
 app.get("/createPost", requireLogin, (req, res) => {
   const sessioId = req.session.user._id;
   User.findOne({ _id: sessioId })
@@ -50,7 +52,8 @@ app.get("/createPost", requireLogin, (req, res) => {
     })
     .catch((err) => console.log(err));
 });
-// diary page
+
+// Main diary page
 app.get("/personalDiary", requireLogin, (req, res) => {
   const sessioId = req.session.user._id;
   User.findOne({ _id: sessioId })
@@ -65,6 +68,7 @@ app.get("/personalDiary", requireLogin, (req, res) => {
     .catch((err) => console.log(err));
 });
 
+// Found posts page
 app.get("/foundPosts", requireLogin, (req, res) => {
   const searchDate = moment(req.query.searchDate).format("Do MMM YYYY");
   const sessioId = req.session.user._id;
@@ -73,7 +77,6 @@ app.get("/foundPosts", requireLogin, (req, res) => {
       let postsList = foundUser.postsList;
       if (searchDate) {
         postsList = postsList.filter((post) => post.date === searchDate);
-        console.log(postsList);
         if (postsList.length > 0) {
           res.render("foundPosts", {
             usersName: foundUser.name,
@@ -92,6 +95,7 @@ app.get("/foundPosts", requireLogin, (req, res) => {
     .catch((err) => console.log(err));
 });
 
+// Delete post
 app.get("/deletePost", requireLogin, (req, res) => {
   const postId = req.query.id;
   const sessionId = req.session.user._id;
@@ -106,6 +110,7 @@ app.get("/deletePost", requireLogin, (req, res) => {
     .catch((err) => console.log(err));
 });
 
+// Edit post
 app.get("/editPost", requireLogin, (req, res) => {
   const postId = req.query.id;
   const sessionId = req.session.user._id;
@@ -129,6 +134,7 @@ app.get("/editPost", requireLogin, (req, res) => {
     .catch((err) => console.log(err));
 });
 
+// Render full story
 app.get("/posts/:postId", requireLogin, (req, res) => {
   const postId = req.params.postId;
   const sessionId = req.session.user._id;
@@ -154,6 +160,7 @@ app.get("/posts/:postId", requireLogin, (req, res) => {
     .catch((err) => console.log(err));
 });
 
+// Users nots page
 app.get("/notes", requireLogin, (req, res) => {
   const sessioId = req.session.user._id;
   User.findOne({ _id: sessioId })
@@ -167,10 +174,12 @@ app.get("/notes", requireLogin, (req, res) => {
     .catch((err) => console.log(err));
 });
 
+// Forgot password form
 app.get("/forgotPassword", (req, res) => {
   res.render("forgotPassword", { message: "" });
 });
 
+// Reset password form
 app.get("/resetPassword", (req, res) => {
   const token = req.query.token;
   console.log(token);
@@ -188,6 +197,7 @@ app.get("/resetPassword", (req, res) => {
     })
     .catch((err) => console.log(err));
 });
+
 // POST routes:
 // Register a new user
 app.post("/register", (req, res) => {

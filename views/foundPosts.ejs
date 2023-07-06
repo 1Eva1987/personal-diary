@@ -1,21 +1,23 @@
 <%- include("partials/header") %>
 <%- include("partials/nav") %>
-    <p class="story">Found Stories:</p>
-    <% postsList.forEach((post)=>{ %>
-        <div class="entry">
-            <h2 class="date"><%= post.date %><h2>
-            <h3><%= post.title %></h3>
-            <% if(post.text.length> 50){ %>
-                <p><%= post.text.substring(0, 200)+ "..." %></p>
-                <a href="/posts/<%= post._id %>">Read More</a>
-            <%} else{%>
-                <p><%= post.text %></p>
-            <%}%>
-            <div class="btn-container">
-                <button class="btn"><a class="edit-del-link" href="/editPost?id=<%= post._id %>">Edit</a></button>
-                <button class="btn"><a  class="edit-del-link" href="/deletePost?id=<%= post._id %>">Delete</a></button>
-                <a class="back" href="/personalDiary">Back</a>
-            </div> 
-        </div>
-    <%  }) %>
+
+<p class="story">Found Stories:</p>
+<% postsList.forEach((post)=>{ %>
+    <div class="entry">
+        <h2 class="date"><%= post.date %><h2>
+        <h3><%= post.title %></h3>
+        <% if(post.text.length> 50){ %>
+            <p><%= post.text.substring(0, 200)+ "..." %></p>
+            <a href="/posts/<%= post._id %>">Read More</a>
+        <%} else{%>
+            <p><%= post.text %></p>
+        <%}%>
+        <div class="btn-container">
+            <button class="btn"><a class="edit-del-link" href="/editPost?id=<%= post._id %>">Edit</a></button>
+            <button class="btn"><a  class="edit-del-link" href="/deletePost?id=<%= post._id %>">Delete</a></button>
+            <a class="back" href="/personalDiary">Back</a>
+        </div> 
+    </div>
+<%  }) %>
+
 <%- include("partials/footer") %>

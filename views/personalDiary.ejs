@@ -1,43 +1,45 @@
 <%- include("partials/header") %>
 <%- include("partials/nav") %>
 
-    <h1 class="story">My Story begins here...</h1>
-
-    <div class="compose">
-        <a href="/createPost">Create New Entry <i class="fa-solid fa-plus"></i></a>
-    </div>
-    <%if(postsList.length >0){%>
-        <div class="search-form">
+<h1 class="story">My Story begins here...</h1>
+<div class="compose">
+    <a href="/createPost">Create New Entry <i class="fa-solid fa-plus"></i></a>
+</div>
+<!-- if at least 1 post exist show search form -->
+<%if(postsList.length >0){%>
+    <div class="search-form">
         <form action="/foundPosts" method="get">
             <input type="date" name="searchDate" >
             <button class="btn" type="submit">Search</button>
         </form>
     </div>
-    <%}%>
-    <p class="post-not-found"><%= errorMessage %></p>
-        <% postsList.forEach((post)=>{ %>
-            <div class="entry">
-                <div>
-                    <h2 class="date"><%= post.date %><h2>
-                    <h3><%= post.title %></h3>
-                    <% if(post.text.length> 50){ %>
-                        <p><%= post.text.substring(0, 200)+ "..." %></p>
-                        <a href="/posts/<%= post._id %>">Read More</a>
-                    <%} else{%>
-                        <p><%= post.text %></p>
-                    <%}%> 
-                </div>
-                <div class="btn-container">
-                    <form action="/deletePost" method="post">
-                        <input type="hidden" name="id" value="<%= post._id %>">
-                        <button class="btn" type="submit">Delete</button>
-                    </form>
-                    <form action="/editPost" method="get">
-                        <input type="hidden" name="id" value="<%= post._id %>" >
-                        <button class="btn" type="submit">Edit</button>
-                    </form>
-                </div>
-            </div>
-        <%  }) %>
+<%}%>
 
- <%- include("partials/footer") %> 
+<p class="post-not-found"><%= errorMessage %></p>
+<!-- render posts -->
+<% postsList.forEach((post)=>{ %>
+    <div class="entry">
+        <div>
+            <h2 class="date"><%= post.date %><h2>
+            <h3><%= post.title %></h3>
+            <% if(post.text.length> 50){ %>
+                <p><%= post.text.substring(0, 200)+ "..." %></p>
+                <a href="/posts/<%= post._id %>">Read More</a>
+            <%} else{%>
+                <p><%= post.text %></p>
+            <%}%> 
+        </div>
+        <div class="btn-container">
+            <form action="/deletePost" method="post">
+                <input type="hidden" name="id" value="<%= post._id %>">
+                <button class="btn" type="submit">Delete</button>
+            </form>
+            <form action="/editPost" method="get">
+                <input type="hidden" name="id" value="<%= post._id %>" >
+                <button class="btn" type="submit">Edit</button>
+            </form>
+        </div>
+    </div>
+<%  }) %>
+
+<%- include("partials/footer") %> 
