@@ -2,7 +2,7 @@
 
 ## Description
 
-The Personal Diary App is a secure and user-friendly web application. The app implements a robust login system to protect user data, ensuring that only authorized individuals can access their diary entries. This allows users to register and maintain a personal diary and notes online. With this app, users can privately document their thoughts, feelings, goals, stories, and more. Users can easily edit or delete their diary entries and notes, which enablies them to refine their content over time and maintain an up-to-date record of their personal journey. The app provides a convenient and secure platform for users to express themselves and preserve their precious memories.
+The Personal Diary App is a secure and user-friendly web application. The app implements a robust login system to protect user data, ensuring that only authorized individuals can access their diary entries. This allows users to register and maintain a personal diary and notes online. With this app, users can privately document their thoughts, feelings, goals, stories, and more. Users can easily edit, delete and find their diary entries and notes, which enablies them to refine their content over time and maintain an up-to-date record of their personal journey. The app provides a convenient and secure platform for users to express themselves and preserve their precious memories.
 
 ![Personal-Diary](./public/images/personal-diary.png)
 
